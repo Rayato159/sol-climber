@@ -9,9 +9,9 @@ fn main() {
     };
 
     let spawn_bundle = (
-        components::camera::spawn_camera,
+        systems::camera::spawn_camera,
         systems::map::spawn_floor,
-        components::light::spawn_light,
+        systems::light::spawn_light,
     );
 
     let camera_system_bundle = (

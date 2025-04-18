@@ -5,3 +5,5 @@ edition = "2024"
 
 [dependencies]
 bevy = "0.15.3"
+solana-client = "2.2.7"
+solana-sdk = "2.2.2"
