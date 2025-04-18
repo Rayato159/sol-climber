@@ -1,8 +1,15 @@
 use bevy::prelude::*;
 
 pub fn spawn_light(mut commands: Commands) {
+    let light_pos = Vec3::new(10.0, 20.0, 10.0);
+    let target = Vec3::ZERO;
+
     commands.spawn((
-        DirectionalLight::default(),
-        Transform::from_translation(Vec3::ONE).looking_at(Vec3::ZERO, Vec3::Y),
+        DirectionalLight {
+            illuminance: 10_000.0,
+            shadows_enabled: true,
+            ..default()
+        },
+        Transform::from_translation(light_pos).looking_at(target, Vec3::Y),
     ));
 }
