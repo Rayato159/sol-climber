@@ -20,12 +20,19 @@ fn main() {
         systems::camera::camera_follow_orbit_player,
     );
 
+    let player_physics = (
+        entities::player::player_movement,
+        entities::player::player_jump,
+        entities::player::player_fall,
+        entities::player::player_rotation,
+    );
+
     App::new()
         .insert_resource(CameraSetting::default())
         .insert_resource(CameraOrbit::default())
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, start_up_bundle)
         .add_systems(Update, camera_control)
-        .add_systems(Update, entities::player::player_movement)
+        .add_systems(Update, player_physics)
         .run();
 }

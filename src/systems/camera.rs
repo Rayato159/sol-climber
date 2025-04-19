@@ -75,7 +75,7 @@ pub fn orbit_camera_control(
         orbit.pitch += delta.y * sensitivity;
 
         // Clamp pitch to avoid flipping
-        orbit.pitch = orbit.pitch.clamp(10_f32.to_radians(), 89_f32.to_radians());
+        orbit.pitch = orbit.pitch.clamp(0_f32.to_radians(), 89_f32.to_radians());
     }
 }
 
@@ -87,30 +87,21 @@ pub fn camera_follow_orbit_player(
     let player = player_query.single();
     let mut camera_transform = camera_query.single_mut();
 
-    //     z+
-    //     |
-    //     |      ● ← 90° right
-    //     |
-    //     ●---------●---------●
-    // 180° back   Player   0° front
-    //     |
-    //     |             ● ← 270° left
-    //     |
-
     let yaw = orbit.yaw;
     let pitch = orbit.pitch;
     let radius = orbit.radius;
 
     // Projection: Spherical to Cartesian
 
-    // Project r to x and y axis
+    // Project r to x axis and y axis
     // x = r * sin(yaw) * cos(pitch)
 
     // Project r to y axis
     // y = r * sin(pitch)
 
-    // Project r to z axis
+    // Project r to z axis and y axis
     // z = r * cos(yaw) * cos(pitch)
+
     let x = radius * yaw.cos() * pitch.cos();
     let y = radius * pitch.sin();
     let z = radius * yaw.sin() * pitch.cos();
