@@ -154,18 +154,19 @@ pub fn player_fall(
     time: Res<Time>,
     mut player_query: Query<(&PlayerCollider, &mut Transform, &mut PlayerPhysics), With<Player>>,
 ) {
-    let (collider, mut transform, mut physics) = player_query.single_mut();
+    let (collider, mut transform, mut player_physics) = player_query.single_mut();
 
-    physics.velocity.y += GRAVITY * time.delta_secs();
-    transform.translation += physics.velocity * time.delta_secs();
+    player_physics.velocity.y += GRAVITY * time.delta_secs();
+    transform.translation += player_physics.velocity * time.delta_secs();
 
-    physics.velocity.x *= 0.98;
-    physics.velocity.z *= 0.98;
+    player_physics.velocity.x *= 0.98;
+    player_physics.velocity.z *= 0.98;
 
     let min_y = collider.height / 2.0;
+
     if transform.translation.y <= min_y {
         transform.translation.y = min_y;
-        physics.velocity.y = 0.0;
-        physics.on_ground = true;
+        player_physics.velocity.y = 0.0;
+        player_physics.on_ground = true;
     }
 }
