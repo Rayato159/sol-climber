@@ -1,1 +1,1 @@
-pub mod camera_setting;
+pub mod camera;

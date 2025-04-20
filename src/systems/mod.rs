@@ -1,3 +1,4 @@
 pub mod camera;
-pub mod light;
+pub mod fog;
 pub mod map;
+pub mod sun;
