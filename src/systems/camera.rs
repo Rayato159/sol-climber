@@ -3,6 +3,8 @@ use bevy::{
     prelude::*,
 };
 
+use bevy_rapier3d::prelude::*;
+
 use crate::{
     entities::player::Player,
     resources::camera::{CameraOrbit, CameraSetting},
@@ -75,14 +77,15 @@ pub fn orbit_camera_control(
         orbit.pitch += delta.y * sensitivity;
 
         // Clamp pitch to avoid flipping
-        orbit.pitch = orbit.pitch.clamp(-89_f32.to_radians(), 89_f32.to_radians());
+        orbit.pitch = orbit.pitch.clamp(-40_f32.to_radians(), 89_f32.to_radians());
     }
 }
 
 pub fn camera_follow_orbit_player(
     orbit: Res<CameraOrbit>,
-    mut camera_query: Query<&mut Transform, (With<Camera3d>, Without<Player>)>,
+    rapier_context: ReadDefaultRapierContext,
     player_query: Query<&Transform, With<Player>>,
+    mut camera_query: Query<&mut Transform, (With<Camera3d>, Without<Player>)>,
 ) {
     let player = player_query.single();
     let mut camera_transform = camera_query.single_mut();
@@ -91,24 +94,30 @@ pub fn camera_follow_orbit_player(
     let pitch = orbit.pitch;
     let radius = orbit.radius;
 
-    // Projection: Spherical to Cartesian
-
-    // Project r to x axis and y axis
-    // x = r * sin(yaw) * cos(pitch)
-
-    // Project r to y axis
-    // y = r * sin(pitch)
-
-    // Project r to z axis and y axis
-    // z = r * cos(yaw) * cos(pitch)
-
     let x = radius * yaw.cos() * pitch.cos();
     let y = radius * pitch.sin();
     let z = radius * yaw.sin() * pitch.cos();
 
     let offset = Vec3::new(x, y, z);
-    let target = player.translation;
 
-    camera_transform.translation = target + offset;
-    camera_transform.look_at(target, Vec3::Y);
+    let player_eye_pos = player.translation + Vec3::Y * 1.0;
+
+    let ideal_camera_pos = player_eye_pos + offset;
+    let dir = (ideal_camera_pos - player_eye_pos).normalize();
+    let max_dist = offset.length();
+    let mut final_dist = max_dist;
+
+    if let Some((_entity, toi)) = rapier_context.cast_ray(
+        player_eye_pos,
+        dir,
+        max_dist,
+        true,
+        QueryFilter::default().exclude_sensors(),
+    ) {
+        final_dist = toi - 0.1;
+    }
+
+    let actual_camera_pos = player_eye_pos + dir * final_dist;
+    camera_transform.translation = actual_camera_pos;
+    camera_transform.look_at(player_eye_pos, Vec3::Y);
 }

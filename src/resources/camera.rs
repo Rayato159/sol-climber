@@ -10,7 +10,7 @@ pub struct CameraSetting {
 impl Default for CameraSetting {
     fn default() -> Self {
         Self {
-            zoom_range: 0.4..0.8,
+            zoom_range: 0.5..1.0,
             zoom_speed: 0.1,
         }
     }
@@ -27,7 +27,7 @@ impl Default for CameraOrbit {
     fn default() -> Self {
         Self {
             yaw: 0.0,
-            pitch: 20_f32.to_radians(),
+            pitch: 10_f32.to_radians(),
             radius: 10.0,
         }
     }
