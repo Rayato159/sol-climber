@@ -100,7 +100,7 @@ pub fn camera_follow_orbit_player(
 
     let offset = Vec3::new(x, y, z);
 
-    let player_eye_pos = player.translation + Vec3::Y * 1.0;
+    let player_eye_pos = player.translation + Vec3::Y * 1.2;
 
     let ideal_camera_pos = player_eye_pos + offset;
     let dir = (ideal_camera_pos - player_eye_pos).normalize();
