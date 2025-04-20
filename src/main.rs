@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_rapier3d::prelude::*;
 use sol_climber::{
     entities,
     resources::camera::{CameraOrbit, CameraSetting},
@@ -23,14 +24,16 @@ fn main() {
     let player_physics = (
         entities::player::player_movement,
         entities::player::player_jump,
-        entities::player::player_fall,
         entities::player::player_rotation,
+        entities::player::player_ground_check,
     );
 
     App::new()
         .insert_resource(CameraSetting::default())
         .insert_resource(CameraOrbit::default())
         .add_plugins(DefaultPlugins)
+        .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
+        .add_plugins(RapierDebugRenderPlugin::default())
         .add_systems(Startup, start_up_bundle)
         .add_systems(Update, camera_control)
         .add_systems(Update, player_physics)

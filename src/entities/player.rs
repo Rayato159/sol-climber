@@ -1,6 +1,5 @@
 use bevy::prelude::*;
-
-use super::GRAVITY;
+use bevy_rapier3d::prelude::*;
 // use solana_sdk::pubkey::Pubkey;
 
 #[derive(Debug, Component)]
@@ -21,28 +20,11 @@ impl Player {
 }
 
 #[derive(Debug, Component)]
-pub struct PlayerCollider {
-    pub height: f32,
-    pub radius: f32,
-}
-
-impl Default for PlayerCollider {
-    fn default() -> Self {
-        Self {
-            height: 1.0,
-            radius: 0.5,
-        }
-    }
-}
-
-#[derive(Debug, Component)]
 pub struct PlayerPhysics {
     pub walk_speed: f32,
     pub run_speed: f32,
     pub acceleration: f32,
-    pub velocity: Vec3,
     pub jump_force: f32,
-    pub on_ground: bool,
 }
 
 impl Default for PlayerPhysics {
@@ -51,12 +33,13 @@ impl Default for PlayerPhysics {
             walk_speed: 2.0,
             run_speed: 4.0,
             acceleration: 0.5,
-            velocity: Vec3::ZERO,
             jump_force: 3.5,
-            on_ground: true,
         }
     }
 }
+
+#[derive(Debug, Component)]
+pub struct PlayerGroundSensor(pub bool);
 
 #[derive(Debug, Component, Default)]
 pub struct PlayerMoveDirection(pub Option<Vec3>);
@@ -66,15 +49,21 @@ pub fn spawn_player(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    let player_collider = PlayerCollider::default();
-    let init_pos = Vec3::new(0.0, player_collider.height / 2., 0.0);
+    let player_height = 1.0;
+    let init_pos = Vec3::new(0.0, player_height / 2., 0.0);
 
     commands.spawn((
-        Mesh3d(meshes.add(Cuboid::new(0.5, player_collider.height, 0.5))),
+        Mesh3d(meshes.add(Cuboid::new(0.5, player_height, 0.5))),
         MeshMaterial3d(materials.add(Color::WHITE)),
+        RigidBody::Dynamic,
+        Collider::cuboid(0.5, player_height / 2.0, 0.5),
+        GravityScale(1.0),
+        LockedAxes::ROTATION_LOCKED,
+        Velocity::zero(),
+        ActiveEvents::COLLISION_EVENTS,
         Transform::from_translation(init_pos),
+        PlayerGroundSensor(true),
         Player::new("E3YvQn4wk6JzyGY1uZMyzKCfu8ctM3kCu8Nk6KFZu8eM"),
-        PlayerCollider::default(),
         PlayerPhysics::default(),
         PlayerMoveDirection::default(),
     ));
@@ -82,11 +71,10 @@ pub fn spawn_player(
 
 pub fn player_movement(
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    time: Res<Time>,
-    mut query: Query<(&mut Transform, &mut PlayerMoveDirection, &PlayerPhysics), With<Player>>,
+    mut query: Query<(&mut Velocity, &mut PlayerMoveDirection, &PlayerPhysics), With<Player>>,
     camera_query: Query<&Transform, (With<Camera3d>, Without<Player>)>,
 ) {
-    let (mut transform, mut move_dir, player_physics) = query.single_mut();
+    let (mut velocity, mut move_dir, player_physics) = query.single_mut();
     let camera = camera_query.single();
 
     let mut direction = Vec3::ZERO;
@@ -116,9 +104,15 @@ pub fn player_movement(
             player_physics.walk_speed
         };
 
-        transform.translation += dir * speed * time.delta_secs();
+        let movement = dir * speed;
+
+        velocity.linvel.x = movement.x;
+        velocity.linvel.z = movement.z;
+
         move_dir.0 = Some(dir);
     } else {
+        velocity.linvel.x = 0.0;
+        velocity.linvel.z = 0.0;
         move_dir.0 = None;
     }
 }
@@ -134,39 +128,41 @@ pub fn player_rotation(mut query: Query<(&mut Transform, &PlayerMoveDirection), 
 
 pub fn player_jump(
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut player_query: Query<&mut PlayerPhysics, (With<Player>, Without<Camera3d>)>,
+    mut player_query: Query<(&mut Velocity, &mut PlayerGroundSensor, &PlayerPhysics), With<Player>>,
     camera_query: Query<&Transform, (With<Camera3d>, Without<Player>)>,
 ) {
-    let mut player_physics = player_query.single_mut();
+    let (mut velocity, sensor, physics) = player_query.single_mut();
     let camera = camera_query.single();
 
-    if keyboard_input.just_pressed(KeyCode::Space) && player_physics.on_ground {
-        player_physics.velocity.y = player_physics.jump_force;
-        player_physics.on_ground = false;
+    if keyboard_input.just_pressed(KeyCode::Space) && sensor.0 {
+        velocity.linvel.y = physics.jump_force;
 
         let forward = camera.forward().xz().normalize();
-        let impulse = Vec3::new(forward.x, 0.0, forward.y) * player_physics.acceleration;
-        player_physics.velocity += impulse;
+        let impulse = Vec3::new(forward.x, 0.0, forward.y) * physics.acceleration;
+
+        velocity.linvel.x += impulse.x;
+        velocity.linvel.z += impulse.z;
     }
 }
 
-pub fn player_fall(
-    time: Res<Time>,
-    mut player_query: Query<(&PlayerCollider, &mut Transform, &mut PlayerPhysics), With<Player>>,
+pub fn player_ground_check(
+    mut collision_events: EventReader<CollisionEvent>,
+    mut player_query: Query<(&mut PlayerGroundSensor, Entity), With<Player>>,
 ) {
-    let (collider, mut transform, mut player_physics) = player_query.single_mut();
+    let (mut ground_sensor, player_entity) = player_query.single_mut();
 
-    player_physics.velocity.y += GRAVITY * time.delta_secs();
-    transform.translation += player_physics.velocity * time.delta_secs();
-
-    player_physics.velocity.x *= 0.98;
-    player_physics.velocity.z *= 0.98;
-
-    let min_y = collider.height / 2.0;
-
-    if transform.translation.y <= min_y {
-        transform.translation.y = min_y;
-        player_physics.velocity.y = 0.0;
-        player_physics.on_ground = true;
+    for event in collision_events.read() {
+        match event {
+            CollisionEvent::Started(e1, e2, _) => {
+                if *e1 == player_entity || *e2 == player_entity {
+                    ground_sensor.0 = true;
+                }
+            }
+            CollisionEvent::Stopped(e1, e2, _) => {
+                if *e1 == player_entity || *e2 == player_entity {
+                    ground_sensor.0 = false;
+                }
+            }
+        }
     }
 }
