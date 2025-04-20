@@ -3565,9 +3565,11 @@ dependencies = [
  "ordered-float",
  "parry3d",
  "profiling",
+ "rayon",
  "rustc-hash 2.1.1",
  "simba",
  "thiserror",
+ "vec_map",
 ]
 
 [[package]]

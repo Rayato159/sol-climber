@@ -10,7 +10,7 @@ pub struct CameraSetting {
 impl Default for CameraSetting {
     fn default() -> Self {
         Self {
-            zoom_range: 0.4..1.0,
+            zoom_range: 0.4..0.8,
             zoom_speed: 0.1,
         }
     }

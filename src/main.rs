@@ -10,7 +10,8 @@ fn main() {
     let start_up_bundle = (
         systems::camera::spawn_camera,
         systems::map::spawn_floor,
-        systems::light::spawn_light,
+        systems::sun::spawn_sun,
+        systems::fog::spawn_fog,
         entities::player::spawn_player,
     );
 
