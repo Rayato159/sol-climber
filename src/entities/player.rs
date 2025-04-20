@@ -50,13 +50,15 @@ pub fn spawn_player(
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     let player_height = 1.0;
+    let player_width = 0.5;
+    let player_depth = 0.5;
     let init_pos = Vec3::new(0.0, player_height / 2., 0.0);
 
     commands.spawn((
-        Mesh3d(meshes.add(Cuboid::new(0.5, player_height, 0.5))),
+        Mesh3d(meshes.add(Cuboid::new(player_width, player_height, player_depth))),
         MeshMaterial3d(materials.add(Color::WHITE)),
         RigidBody::Dynamic,
-        Collider::cuboid(0.5, player_height / 2.0, 0.5),
+        Collider::cuboid(player_width / 2., player_height / 2.0, player_depth / 2.0),
         GravityScale(1.0),
         LockedAxes::ROTATION_LOCKED,
         Velocity::zero(),

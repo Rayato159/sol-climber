@@ -6,9 +6,9 @@ pub fn spawn_floor(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    let size_x = 5.0;
-    let size_z = 5.0;
-    let thickness = 0.1;
+    let size_x = 15.0;
+    let size_z = 15.0;
+    let thickness = 0.01;
 
     commands.spawn((
         Mesh3d(meshes.add(Plane3d::default().mesh().size(size_x, size_z))),

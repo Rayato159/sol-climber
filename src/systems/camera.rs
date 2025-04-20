@@ -75,7 +75,7 @@ pub fn orbit_camera_control(
         orbit.pitch += delta.y * sensitivity;
 
         // Clamp pitch to avoid flipping
-        orbit.pitch = orbit.pitch.clamp(0_f32.to_radians(), 89_f32.to_radians());
+        orbit.pitch = orbit.pitch.clamp(-89_f32.to_radians(), 89_f32.to_radians());
     }
 }
 
