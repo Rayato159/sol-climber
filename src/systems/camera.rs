@@ -6,12 +6,12 @@ use bevy::{
 use bevy_rapier3d::prelude::*;
 
 use crate::{
-    entities::player::Player,
+    entities::player::{Player, PlayerPhysics},
     resources::camera::{CameraOrbit, CameraSetting},
 };
 
 pub fn spawn_camera(mut commands: Commands, camera_setting: Res<CameraSetting>) {
-    let init_pos = Vec3::new(0.0, 2.0, 5.0);
+    let init_pos = Vec3::new(0.0, 1.0, 5.0);
 
     commands.spawn((
         Camera3d::default(),
@@ -25,14 +25,14 @@ pub fn spawn_camera(mut commands: Commands, camera_setting: Res<CameraSetting>) 
 }
 
 pub fn camera_follow_player(
-    player_query: Query<&Transform, With<Player>>,
+    player_query: Query<(&Transform, &PlayerPhysics), With<Player>>,
     mut camera_query: Query<&mut Transform, (With<Camera3d>, Without<Player>)>,
     time: Res<Time>,
 ) {
-    let player_transform = player_query.single();
+    let (player_transform, player_physics) = player_query.single();
     let mut camera_transform = camera_query.single_mut();
 
-    let offset = Vec3::new(0.0, 4.0, 10.0);
+    let offset = Vec3::new(0.0, player_physics.player_height - 0.2, 5.0);
     let target_pos = player_transform.translation + offset;
 
     let follow_speed = 0.1;

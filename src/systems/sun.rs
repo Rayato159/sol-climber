@@ -5,7 +5,7 @@ pub fn spawn_sun(mut commands: Commands) {
 
     commands.spawn((
         DirectionalLight {
-            illuminance: 50_000.0,
+            illuminance: 20_000.0,
             shadows_enabled: true,
             color: Color::srgb(1.0, 0.95, 0.85),
             ..Default::default()

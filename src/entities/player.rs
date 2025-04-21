@@ -25,6 +25,9 @@ pub struct PlayerPhysics {
     pub run_speed: f32,
     pub acceleration: f32,
     pub jump_force: f32,
+    pub player_height: f32,
+    pub player_width: f32,
+    pub player_depth: f32,
 }
 
 impl Default for PlayerPhysics {
@@ -34,6 +37,9 @@ impl Default for PlayerPhysics {
             run_speed: 4.0,
             acceleration: 0.5,
             jump_force: 3.5,
+            player_height: 1.65,
+            player_width: 0.7,
+            player_depth: 0.5,
         }
     }
 }
@@ -44,21 +50,21 @@ pub struct PlayerGroundSensor(pub bool);
 #[derive(Debug, Component, Default)]
 pub struct PlayerMoveDirection(pub Option<Vec3>);
 
-pub fn spawn_player(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-) {
-    let player_height = 1.0;
-    let player_width = 0.5;
-    let player_depth = 0.5;
-    let init_pos = Vec3::new(0.0, player_height / 2., 0.0);
+pub fn spawn_player(asset_server: Res<AssetServer>, mut commands: Commands) {
+    let player_physics = PlayerPhysics::default();
+
+    let init_pos = Vec3::new(0.0, player_physics.player_height / 2., 0.0);
 
     commands.spawn((
-        Mesh3d(meshes.add(Cuboid::new(player_width, player_height, player_depth))),
-        MeshMaterial3d(materials.add(Color::WHITE)),
+        Name::new("Player"),
+        SceneRoot(
+            asset_server.load(GltfAssetLabel::Scene(0).from_asset("characters/Character.glb")),
+        ),
         RigidBody::Dynamic,
-        Collider::cuboid(player_width / 2., player_height / 2.0, player_depth / 2.0),
+        Collider::cylinder(
+            player_physics.player_height / 2.0,
+            player_physics.player_width / 2.0,
+        ),
         GravityScale(1.0),
         LockedAxes::ROTATION_LOCKED,
         Velocity::zero(),
@@ -66,7 +72,7 @@ pub fn spawn_player(
         Transform::from_translation(init_pos),
         PlayerGroundSensor(true),
         Player::new("E3YvQn4wk6JzyGY1uZMyzKCfu8ctM3kCu8Nk6KFZu8eM"),
-        PlayerPhysics::default(),
+        player_physics,
         PlayerMoveDirection::default(),
     ));
 }
