@@ -11,7 +11,7 @@ use crate::{
 };
 
 pub fn spawn_camera(mut commands: Commands, camera_setting: Res<CameraSetting>) {
-    let init_pos = Vec3::new(0.0, 1.0, 5.0);
+    let init_pos = Vec3::new(0.0, 0.7, 5.0);
 
     commands.spawn((
         Camera3d::default(),

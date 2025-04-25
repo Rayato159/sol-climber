@@ -37,9 +37,9 @@ impl Default for PlayerPhysics {
             run_speed: 4.0,
             acceleration: 0.5,
             jump_force: 3.5,
-            player_height: 1.65,
-            player_width: 0.7,
-            player_depth: 0.5,
+            player_height: 1.66,
+            player_width: 0.6,
+            player_depth: 0.55,
         }
     }
 }
@@ -53,17 +53,19 @@ pub struct PlayerMoveDirection(pub Option<Vec3>);
 pub fn spawn_player(asset_server: Res<AssetServer>, mut commands: Commands) {
     let player_physics = PlayerPhysics::default();
 
-    let init_pos = Vec3::new(0.0, player_physics.player_height / 2., 0.0);
+    let init_pos = Vec3::new(0.0, 0.0, 0.0);
 
     commands.spawn((
         Name::new("Player"),
         SceneRoot(
-            asset_server.load(GltfAssetLabel::Scene(0).from_asset("characters/Character.glb")),
+            asset_server
+                .load(GltfAssetLabel::Scene(0).from_asset("characters/MainCharacter.glb#Scene0")),
         ),
         RigidBody::Dynamic,
-        Collider::cylinder(
-            player_physics.player_height / 2.0,
+        Collider::cuboid(
             player_physics.player_width / 2.0,
+            player_physics.player_height / 2.0,
+            player_physics.player_depth / 2.0,
         ),
         GravityScale(1.0),
         LockedAxes::ROTATION_LOCKED,
