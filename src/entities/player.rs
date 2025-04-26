@@ -40,7 +40,7 @@ impl Default for PlayerPhysics {
             walk_speed: 2.0,
             run_speed: 6.0,
             acceleration: 1.5,
-            jump_force: 3.6,
+            jump_force: 4.0,
             player_height: 1.66,
             player_width: 0.562503,
             player_depth: 0.75153,
@@ -73,6 +73,7 @@ pub fn spawn_player(
     let (graph, node_indices) = AnimationGraph::from_clips([
         asset_server.load(GltfAssetLabel::Animation(0).from_asset(PLAYER_MODEL_PATH)),
         asset_server.load(GltfAssetLabel::Animation(1).from_asset(PLAYER_MODEL_PATH)),
+        asset_server.load(GltfAssetLabel::Animation(2).from_asset(PLAYER_MODEL_PATH)),
     ]);
 
     let graph_handle = graphs.add(graph);
@@ -171,11 +172,11 @@ pub fn player_movement(
         }
 
         if direction.length_squared() > 0.0 {
-            if playing_animation_index.index() != 2 && player_ground_sensor.0 {
+            if playing_animation_index.index() != 3 && player_ground_sensor.0 {
                 animation_transitions
                     .play(
                         &mut player_animation,
-                        animations.animations[1],
+                        animations.animations[2],
                         Duration::from_secs_f32(0.1),
                     )
                     .repeat();
@@ -216,7 +217,7 @@ pub fn player_movement(
 
             return;
         } else {
-            if playing_animation_index.index() != 1 {
+            if playing_animation_index.index() != 1 && playing_animation_index.index() != 2 {
                 animation_transitions
                     .play(
                         &mut player_animation,
@@ -295,7 +296,13 @@ pub fn player_jumping_animation(
             continue;
         };
 
-        if !ground_sensor.0 && playing_animation_index.index() != 1 {
+        if !ground_sensor.0 && playing_animation_index.index() != 2 {
+            animation_transitions.play(
+                &mut player_animation,
+                animations.animations[1],
+                Duration::from_secs_f32(0.1),
+            );
+        } else if ground_sensor.0 && playing_animation_index.index() == 2 {
             animation_transitions
                 .play(
                     &mut player_animation,
