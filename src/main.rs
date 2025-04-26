@@ -8,11 +8,11 @@ use sol_climber::{
 
 fn main() {
     let start_up_bundle = (
-        systems::camera::spawn_camera,
         systems::map::spawn_floor,
         systems::sun::spawn_sun,
         systems::fog::spawn_fog,
         entities::player::spawn_player,
+        systems::camera::spawn_camera,
     );
 
     let camera_control = (
@@ -27,6 +27,8 @@ fn main() {
         entities::player::player_jump,
         entities::player::player_rotation,
         entities::player::player_ground_check,
+        entities::player::init_player_animation,
+        entities::player::player_jumping_animation,
     );
 
     App::new()
