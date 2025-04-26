@@ -200,7 +200,7 @@ pub fn player_movement(
                 let playing_animation = player_animation
                     .animation_mut(playing_animation_index)
                     .unwrap();
-                playing_animation.set_speed(2.0);
+                playing_animation.set_speed(1.2);
             } else {
                 let playing_animation = player_animation
                     .animation_mut(playing_animation_index)
