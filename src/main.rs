@@ -27,6 +27,8 @@ fn main() {
         entities::player::player_jump,
         entities::player::player_rotation,
         entities::player::player_ground_check,
+        entities::player::init_player_animation,
+        entities::player::player_jumping_animation,
     );
 
     App::new()

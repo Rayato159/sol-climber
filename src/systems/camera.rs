@@ -32,7 +32,7 @@ pub fn camera_follow_player(
     let (player_transform, player_physics) = player_query.single();
     let mut camera_transform = camera_query.single_mut();
 
-    let offset = Vec3::new(0.0, player_physics.player_height - 0.2, 5.0);
+    let offset = Vec3::new(0.0, player_physics.player_height, 5.0);
     let target_pos = player_transform.translation + offset;
 
     let follow_speed = 0.1;
