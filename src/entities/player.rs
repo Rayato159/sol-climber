@@ -74,6 +74,7 @@ pub fn spawn_player(
         asset_server.load(GltfAssetLabel::Animation(0).from_asset(PLAYER_MODEL_PATH)),
         asset_server.load(GltfAssetLabel::Animation(1).from_asset(PLAYER_MODEL_PATH)),
         asset_server.load(GltfAssetLabel::Animation(2).from_asset(PLAYER_MODEL_PATH)),
+        asset_server.load(GltfAssetLabel::Animation(3).from_asset(PLAYER_MODEL_PATH)),
     ]);
 
     let graph_handle = graphs.add(graph);
@@ -112,7 +113,7 @@ pub fn init_player_animation(
         let mut transitions = AnimationTransitions::new();
 
         transitions
-            .play(&mut player, animations.animations[0], Duration::ZERO)
+            .play(&mut player, animations.animations[1], Duration::ZERO)
             .repeat();
 
         commands
@@ -172,11 +173,11 @@ pub fn player_movement(
         }
 
         if direction.length_squared() > 0.0 {
-            if playing_animation_index.index() != 3 && player_ground_sensor.0 {
+            if playing_animation_index.index() != 4 && player_ground_sensor.0 {
                 animation_transitions
                     .play(
                         &mut player_animation,
-                        animations.animations[2],
+                        animations.animations[3],
                         Duration::from_secs_f32(0.1),
                     )
                     .repeat();
@@ -217,11 +218,11 @@ pub fn player_movement(
 
             return;
         } else {
-            if playing_animation_index.index() != 1 && playing_animation_index.index() != 2 {
+            if playing_animation_index.index() != 2 && playing_animation_index.index() != 3 {
                 animation_transitions
                     .play(
                         &mut player_animation,
-                        animations.animations[0],
+                        animations.animations[1],
                         Duration::from_secs_f32(0.1),
                     )
                     .repeat();
@@ -296,17 +297,17 @@ pub fn player_jumping_animation(
             continue;
         };
 
-        if !ground_sensor.0 && playing_animation_index.index() != 2 {
+        if !ground_sensor.0 && playing_animation_index.index() != 3 {
             animation_transitions.play(
                 &mut player_animation,
-                animations.animations[1],
+                animations.animations[2],
                 Duration::from_secs_f32(0.1),
             );
-        } else if ground_sensor.0 && playing_animation_index.index() == 2 {
+        } else if ground_sensor.0 && playing_animation_index.index() == 3 {
             animation_transitions
                 .play(
                     &mut player_animation,
-                    animations.animations[0],
+                    animations.animations[1],
                     Duration::from_secs_f32(0.1),
                 )
                 .repeat();
