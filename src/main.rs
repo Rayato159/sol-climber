@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier3d::prelude::*;
 use sol_climber::{
     entities,
@@ -28,6 +29,7 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
         .add_plugins(RapierDebugRenderPlugin::default())
+        .add_plugins(WorldInspectorPlugin::new())
         .configure_sets(
             Startup,
             (
@@ -39,7 +41,7 @@ fn main() {
         )
         .add_systems(
             Startup,
-            systems::map::spawn_floor.in_set(GameStartupSet::World),
+            systems::terrain::spawn_terrain.in_set(GameStartupSet::World),
         )
         .add_systems(
             Startup,

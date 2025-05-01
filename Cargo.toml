@@ -4,7 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-bevy = "0.15"
+bevy = { version = "0.15", features = ["jpeg", "png"] }
 bevy_rapier3d = { version = "0.28", features = ["parallel", "simd-nightly"] }
+bevy-inspector-egui = "0.30.0"
+# serde_json = "1.0.140"
+# serde = { version = "1.0.219", features = ["derive"] }
 # solana-client = "2.2.7"
 # solana-sdk = "2.2.2"

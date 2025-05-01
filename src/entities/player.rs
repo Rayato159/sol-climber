@@ -37,11 +37,11 @@ pub struct PlayerPhysics {
 impl Default for PlayerPhysics {
     fn default() -> Self {
         Self {
-            walk_speed: 2.0,
-            run_speed: 6.0,
+            walk_speed: 4.0,
+            run_speed: 20.0,
             acceleration: 1.5,
             jump_force: 4.0,
-            player_height: 1.66,
+            player_height: 1.0,
             player_width: 0.562503,
             player_depth: 0.75153,
         }
@@ -85,10 +85,10 @@ pub fn spawn_player(
 
     commands.spawn((
         Name::new("Player"),
-        Transform::from_translation(Vec3::ZERO),
+        Transform::from_translation(Vec3::new(0.0, 5.0, 0.0)),
         SceneRoot(asset_server.load(GltfAssetLabel::Scene(0).from_asset(PLAYER_MODEL_PATH))),
         RigidBody::Dynamic,
-        Collider::cylinder(
+        Collider::capsule_y(
             player_physics.player_height / 2.0,
             player_physics.player_width / 2.0,
         ),
@@ -201,7 +201,7 @@ pub fn player_movement(
                 let playing_animation = player_animation
                     .animation_mut(playing_animation_index)
                     .unwrap();
-                playing_animation.set_speed(1.2);
+                playing_animation.set_speed(1.5);
             } else {
                 let playing_animation = player_animation
                     .animation_mut(playing_animation_index)

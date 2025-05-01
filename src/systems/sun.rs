@@ -1,13 +1,13 @@
 use bevy::{pbr::VolumetricLight, prelude::*};
 
 pub fn spawn_sun(mut commands: Commands) {
-    let sun_pos = Vec3::new(300.0, 300.0, 300.0);
+    let sun_pos = Vec3::new(-300.0, 500.0, 300.0);
 
     commands.spawn((
         DirectionalLight {
-            illuminance: 20_000.0,
+            illuminance: 10_000.0,
             shadows_enabled: true,
-            color: Color::srgb(1.0, 0.95, 0.85),
+            color: Color::srgb(0.3, 0.3, 0.4),
             ..Default::default()
         },
         VolumetricLight,
