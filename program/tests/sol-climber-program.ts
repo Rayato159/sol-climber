@@ -27,57 +27,57 @@ describe("sol-climber-program", () => {
     program.programId,
   );
 
-  // it("Initialize Player", async () => {
-  //   await airdrop(player.publicKey);
+  it("Initialize Player", async () => {
+    // await airdrop(player.publicKey);
 
-  //   await program.methods
-  //     .initializePlayer()
-  //     .accountsPartial({
-  //       signer: player.publicKey,
-  //       player: playerPda,
-  //       inventory: inventoryPda,
-  //       systemProgram: anchor.web3.SystemProgram.programId,
-  //     })
-  //     .signers([player])
-  //     .rpc();
+    await program.methods
+      .initializePlayer()
+      .accountsPartial({
+        signer: payer.publicKey,
+        player: playerPda,
+        inventory: inventoryPda,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .signers([payer.payer])
+      .rpc();
 
-  //   console.log("Player initialized");
+    console.log("Player initialized");
 
-  //   const playerAccount = await program.account.player.fetch(playerPda);
-  //   const inventoryAccount = await program.account.inventory.fetch(inventoryPda);
+    const playerAccount = await program.account.player.fetch(playerPda);
+    const inventoryAccount = await program.account.inventory.fetch(inventoryPda);
 
-  //   assert.equal(playerAccount.deathCount, 0);
-  //   assert.equal(playerAccount.summitCount, 0);
-  //   assert.equal(inventoryAccount.equipments.length, 0);
-  // });
+    assert.equal(playerAccount.deathCount, 0);
+    assert.equal(playerAccount.summitCount, 0);
+    assert.equal(inventoryAccount.equipments.length, 0);
+  });
 
-  // it("Dead Increment", async () => {
-  //   await program.methods
-  //     .deadIncrement()
-  //     .accountsPartial({
-  //       player: playerPda,
-  //       wallet: player.publicKey,
-  //     })
-  //     .rpc();
+  it("Dead Increment", async () => {
+    await program.methods
+      .deadIncrement()
+      .accountsPartial({
+        player: playerPda,
+        wallet: payer.publicKey,
+      })
+      .rpc();
 
-  //   const playerAccount = await program.account.player.fetch(playerPda);
+    const playerAccount = await program.account.player.fetch(playerPda);
 
-  //   assert.equal(playerAccount.deathCount, 1);
-  // })
+    assert.equal(playerAccount.deathCount, 1);
+  })
 
-  // it("Reach Summit Increment", async () => {
-  //   await program.methods
-  //     .reachSummitIncrement()
-  //     .accountsPartial({
-  //       player: playerPda,
-  //       wallet: payer.publicKey,
-  //     })
-  //     .rpc();
+  it("Reach Summit Increment", async () => {
+    await program.methods
+      .reachSummitIncrement()
+      .accountsPartial({
+        player: playerPda,
+        wallet: payer.publicKey,
+      })
+      .rpc();
 
-  //   const playerAccount = await program.account.player.fetch(playerPda);
+    const playerAccount = await program.account.player.fetch(playerPda);
 
-  //   assert.equal(playerAccount.summitCount, 1);
-  // });
+    assert.equal(playerAccount.summitCount, 1);
+  });
 
   it("Mint NFT to Player", async () => {
     const mint = anchor.web3.Keypair.generate();
@@ -152,13 +152,13 @@ describe("sol-climber-program", () => {
     assert.ok(inventoryAccount.equipments[0].mint.equals(mint.publicKey));
   });
 
-  const airdrop = async (pubkey: anchor.web3.PublicKey) => {
-    const sig = await anchor.getProvider().connection.requestAirdrop(pubkey, 0.01 * anchor.web3.LAMPORTS_PER_SOL);
-    const blockhash = await anchor.getProvider().connection.getLatestBlockhash();
-    await anchor.getProvider().connection.confirmTransaction({
-      blockhash: blockhash.blockhash,
-      lastValidBlockHeight: blockhash.lastValidBlockHeight,
-      signature: sig,
-    });
-  };
+  // const airdrop = async (pubkey: anchor.web3.PublicKey) => {
+  //   const sig = await anchor.getProvider().connection.requestAirdrop(pubkey, 0.01 * anchor.web3.LAMPORTS_PER_SOL);
+  //   const blockhash = await anchor.getProvider().connection.getLatestBlockhash();
+  //   await anchor.getProvider().connection.confirmTransaction({
+  //     blockhash: blockhash.blockhash,
+  //     lastValidBlockHeight: blockhash.lastValidBlockHeight,
+  //     signature: sig,
+  //   });
+  // };
 });
