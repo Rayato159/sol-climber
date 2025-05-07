@@ -11,10 +11,12 @@ use instructions::*;
 
 #[program]
 pub mod sol_climber_program {
+    use anchor_spl::token::{mint_to, MintTo};
     use mpl_token_metadata::{
         instructions::{
-            CreateMetadataAccountV3Cpi, CreateMetadataAccountV3CpiAccounts,
-            CreateMetadataAccountV3InstructionArgs,
+            CreateMasterEditionV3Cpi, CreateMasterEditionV3CpiAccounts,
+            CreateMasterEditionV3InstructionArgs, CreateMetadataAccountV3Cpi,
+            CreateMetadataAccountV3CpiAccounts, CreateMetadataAccountV3InstructionArgs,
         },
         types::{Creator, DataV2},
     };
@@ -55,6 +57,16 @@ pub mod sol_climber_program {
         require!(name.len() <= 32, MintFailed::NameIsTooLong);
         require!(symbol.len() <= 10, MintFailed::SymbolIsTooLong);
         require!(uri.len() <= 200, MintFailed::UriIsTooLong);
+
+        // ✅ Create mint account
+        let cpi_accounts = MintTo {
+            mint: ctx.accounts.mint.to_account_info(),
+            to: ctx.accounts.ata.to_account_info(),
+            authority: ctx.accounts.payer.to_account_info(),
+        };
+
+        let cpi_ctx = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        mint_to(cpi_ctx, 1)?;
 
         // ✅ Create metadata
         // Create creators list (use payer as the creator)
@@ -98,6 +110,35 @@ pub mod sol_climber_program {
 
         msg!(
             "NFT minted with mint: {} and metadata: {}",
+            ctx.accounts.mint.key(),
+            ctx.accounts.metadata.key()
+        );
+
+        CreateMasterEditionV3Cpi::new(
+            &ctx.accounts.metadata_program,
+            CreateMasterEditionV3CpiAccounts {
+                edition: &ctx.accounts.master_edition,
+                mint: &ctx.accounts.mint.to_account_info(),
+                update_authority: &ctx.accounts.payer.to_account_info(),
+                mint_authority: &ctx.accounts.payer.to_account_info(),
+                payer: &ctx.accounts.payer.to_account_info(),
+                metadata: &ctx.accounts.metadata,
+                token_program: &ctx.accounts.token_program,
+                system_program: &ctx.accounts.system_program,
+                rent: Some(&ctx.accounts.rent.to_account_info()),
+            },
+            CreateMasterEditionV3InstructionArgs {
+                max_supply: Some(0),
+            },
+        )
+        .invoke()
+        .map_err(|e| {
+            msg!("Failed to create Master Edition: {:?}", e);
+            MintFailed::MasterEditionCreationFailed
+        })?;
+
+        msg!(
+            "Master Edition created with mint: {} and metadata: {}",
             ctx.accounts.mint.key(),
             ctx.accounts.metadata.key()
         );

@@ -33,6 +33,11 @@ pub struct MintNftToPlayer<'info> {
     /// CHECK: The Metadata account (PDA derived from the mint).
     #[account(mut)]
     pub metadata: UncheckedAccount<'info>,
+
+    /// CHECK: The Metadata account (PDA derived from the mint).
+    #[account(mut)]
+    pub master_edition: UncheckedAccount<'info>,
+
     /// CHECK: The Metaplex Token Metadata program.
     #[account(address = METADATA_PROGRAM_ID)]
     pub metadata_program: AccountInfo<'info>,

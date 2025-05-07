@@ -13,4 +13,7 @@ pub enum MintFailed {
 
     #[msg("Metadata creation failed")]
     MetadataCreationFailed,
+
+    #[msg("Master edition creation failed")]
+    MasterEditionCreationFailed,
 }

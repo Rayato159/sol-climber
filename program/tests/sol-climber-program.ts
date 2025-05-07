@@ -96,12 +96,23 @@ describe("sol-climber-program", () => {
       TOKEN_METADATA_PROGRAM_ID
     );
 
+    const [masterEditionAccount] = anchor.web3.PublicKey.findProgramAddressSync(
+      [
+        Buffer.from("metadata"),
+        TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+        mint.publicKey.toBuffer(),
+        Buffer.from("edition"),
+      ],
+      TOKEN_METADATA_PROGRAM_ID
+    )
+
     const context = {
       payer: payer.publicKey,
       mint: mint.publicKey,
       player: playerPda,
       ata,
       metadata: metadataAccount,
+      masterEdition: masterEditionAccount,
       metadataProgram: TOKEN_METADATA_PROGRAM_ID,
       tokenProgram: anchor.utils.token.TOKEN_PROGRAM_ID,
       systemProgram: anchor.web3.SystemProgram.programId,
@@ -111,14 +122,19 @@ describe("sol-climber-program", () => {
     }
 
     const metadata = {
-      name: "Crab#1",
+      name: "Crab#2",
       symbol: "DWC",
-      uri: "https://raw.githubusercontent.com/Rayato159/my-metaplex-nft-collections/refs/heads/main/crab%231.json",
+      uri: "https://raw.githubusercontent.com/Rayato159/my-metaplex-nft-collections/refs/heads/main/crab%232.json",
     };
 
     const tx = await program.methods
       .mintNftToPlayer(metadata.name, metadata.symbol, metadata.uri)
       .accounts(context)
+      .preInstructions([
+        anchor.web3.ComputeBudgetProgram.setComputeUnitLimit({
+          units: 400_000,
+        }),
+      ])
       .signers([mint, payer.payer])
       .rpc({ commitment: "confirmed" });
 
