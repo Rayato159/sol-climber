@@ -21,16 +21,12 @@ pub mod sol_climber_program {
         types::{Creator, DataV2},
     };
 
-    use crate::states::Equipment;
-
     use super::*;
 
     pub fn initialize_player(ctx: Context<InitializePlayer>) -> Result<()> {
         let player = &mut ctx.accounts.player;
-        let inventory = &mut ctx.accounts.inventory;
 
         player.initialize();
-        inventory.initialize();
 
         Ok(())
     }
@@ -142,13 +138,6 @@ pub mod sol_climber_program {
             ctx.accounts.mint.key(),
             ctx.accounts.metadata.key()
         );
-
-        // ✅ Save to inventory
-        let inventory = &mut ctx.accounts.player_inventory;
-        inventory.equipments.push(Equipment {
-            mint: ctx.accounts.mint.key(),
-            name,
-        });
 
         Ok(())
     }

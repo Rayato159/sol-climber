@@ -1,4 +1,3 @@
-use crate::states::Inventory;
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
@@ -16,7 +15,7 @@ pub struct MintNftToPlayer<'info> {
     #[account(
         init,
         payer = payer,
-        mint::decimals = 0,
+        mint::decimals = 0, 
         mint::authority = payer,
         mint::freeze_authority = payer
     )]
@@ -49,11 +48,4 @@ pub struct MintNftToPlayer<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
     /// The Rent sysvar.
     pub rent: Sysvar<'info, Rent>,
-
-    #[account(
-        mut,
-        seeds = [b"inventory", payer.key().as_ref()],
-        bump,
-    )]
-    pub player_inventory: Account<'info, Inventory>,
 }
