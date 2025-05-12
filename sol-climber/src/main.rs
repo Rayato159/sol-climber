@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier3d::prelude::*;
 use sol_climber::{
-    entities,
+    entities::{self, player::IsSummitReached},
     resources::camera::{CameraOrbit, CameraSetting},
     systems,
     terrains::{self, death_zone::DeathZoneBounds},
@@ -30,6 +30,7 @@ fn main() {
         .insert_resource(CameraSetting::default())
         .insert_resource(CameraOrbit::default())
         .insert_resource(DeathZoneBounds::default())
+        .insert_resource(IsSummitReached::default())
         .add_plugins(DefaultPlugins)
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
         .add_plugins(RapierDebugRenderPlugin::default())

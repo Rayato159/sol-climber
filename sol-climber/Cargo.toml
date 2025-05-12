@@ -8,7 +8,9 @@ bevy = "0.15"
 bevy_rapier3d = { version = "0.28", features = ["parallel", "simd-nightly"] }
 bevy-inspector-egui = "0.30.0"
 bevy_skybox = "0.6.0"
-# serde_json = "1.0.140"
-# serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
+serde = { version = "1.0.219", features = ["derive"] }
+ureq = "3.0.11"
+# reqwest = { version = "0.12.15", features = ["json"] }
 # solana-client = "2.2.7"
 # solana-sdk = "2.2.2"

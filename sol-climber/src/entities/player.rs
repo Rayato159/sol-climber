@@ -64,6 +64,9 @@ pub struct Animations {
     graph_handle: Handle<AnimationGraph>,
 }
 
+#[derive(Resource, Default)]
+pub struct IsSummitReached(pub bool);
+
 pub fn spawn_player(
     asset_server: Res<AssetServer>,
     mut graphs: ResMut<Assets<AnimationGraph>>,
@@ -92,7 +95,7 @@ pub fn spawn_player(
             player_physics.player_width / 2.0,
         ),
         SceneRoot(asset_server.load(GltfAssetLabel::Scene(0).from_asset(PLAYER_MODEL_PATH))),
-        Player::new("E3YvQn4wk6JzyGY1uZMyzKCfu8ctM3kCu8Nk6KFZu8eM"),
+        Player::new("9V76PugZQpVtnqFKrtn2F5w9xtxfp9HyHgSfNzmApwz7"),
         player_physics.clone(),
         PlayerGroundSensor(true),
         PlayerMoveDirection::default(),
