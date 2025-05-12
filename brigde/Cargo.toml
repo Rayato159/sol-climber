@@ -1,0 +1,19 @@
+[package]
+name = "brigde"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ntex = { version = "2.12.4", features = ["tokio"] }
+ntex-cors = "2.0.0"
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
+anchor-client = { version = "0.31.1", features = ["async"] }
+anchor-lang = "0.31.1"
+anyhow = "1.0.98"
+tracing-subscriber = "0.3.19"
+tracing = "0.1"
+mockall = "0.13.1"
+async-trait = "0.1.88"
+dotenvy = "0.15.7"
