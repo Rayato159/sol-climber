@@ -38,6 +38,25 @@ pub fn check_if_player_reached_summit(
             if let Ok(player) = player_query.get(player_entity) {
                 let player_address = player.address.clone();
 
+                // Mint NFT to player
+                thread_pool
+                    .spawn(async move {
+                        let url = format!("http://localhost:8080/nft/mint_nft_to_player");
+                        match ureq::post(&url).send_empty() {
+                            Ok(response) if response.status() == 200 => {
+                                info!("✅ Mint NFT to player successfully.");
+                            }
+                            Ok(response) => {
+                                error!("❌ Mint NFT to player failed: {}", response.status());
+                            }
+                            Err(e) => {
+                                error!("❌ Error sending summit RPC: {:?}", e);
+                            }
+                        }
+                    })
+                    .detach();
+
+                // Summit reached, send the RPC
                 thread_pool
                     .spawn(async move {
                         let url =
