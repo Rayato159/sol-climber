@@ -1,0 +1,29 @@
+{
+    "name": "TrekkingPoles#1",
+    "description": "SOL Clibmer's Equipment",
+    "image": "https://raw.githubusercontent.com/Rayato159/my-metaplex-nft-collections/refs/heads/main/crab%231.gif",
+    "external_url": "https://dancingwithmycode.com/",
+    "attributes": [
+        {
+            "trait_type": "color",
+            "value": "gray"
+        },
+        {
+            "trait_type": "grip_materials",
+            "value": "wood"
+        },
+        {
+            "trait_type": "materials",
+            "value": "aluminum"
+        }
+    ],
+    "properties": {
+        "files": [
+            {
+                "uri": "https://raw.githubusercontent.com/Rayato159/my-metaplex-nft-collections/refs/heads/main/crab%231.gif",
+                "type": "image/png"
+            }
+        ],
+        "category": "image"
+    }
+}
