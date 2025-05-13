@@ -1,7 +1,7 @@
 {
     "name": "TrekkingPoles#1",
     "description": "SOL Clibmer's Equipment",
-    "image": "https://raw.githubusercontent.com/Rayato159/my-metaplex-nft-collections/refs/heads/main/crab%231.gif",
+    "image": "https://raw.githubusercontent.com/Rayato159/sol-climber/refs/heads/main/nft-collections/TrekkingPoles%231.png",
     "external_url": "https://dancingwithmycode.com/",
     "attributes": [
         {
@@ -20,7 +20,7 @@
     "properties": {
         "files": [
             {
-                "uri": "https://raw.githubusercontent.com/Rayato159/my-metaplex-nft-collections/refs/heads/main/crab%231.gif",
+                "uri": "https://raw.githubusercontent.com/Rayato159/sol-climber/refs/heads/main/nft-collections/TrekkingPoles%231.png",
                 "type": "image/png"
             }
         ],
