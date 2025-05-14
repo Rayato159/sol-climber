@@ -33,8 +33,8 @@ fn main() {
         .insert_resource(IsSummitReached::default())
         .add_plugins(DefaultPlugins)
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
-        .add_plugins(RapierDebugRenderPlugin::default())
-        .add_plugins(WorldInspectorPlugin::new())
+        // .add_plugins(RapierDebugRenderPlugin::default())
+        // .add_plugins(WorldInspectorPlugin::new())
         .configure_sets(
             Startup,
             (
