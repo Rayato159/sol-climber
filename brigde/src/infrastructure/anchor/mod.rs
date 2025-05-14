@@ -212,7 +212,7 @@ impl SolClimberOnChain for SolClimberAnchorClient {
             .send()
             .await?;
 
-        info!("Nint NFT to player with sig: {:?}", sig);
+        info!("Mint NFT to player with sig: {:?}", sig);
 
         Ok(selected.name.to_string())
     }
