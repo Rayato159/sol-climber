@@ -67,4 +67,10 @@ All data is **stored on Solana**. No resets. No bullshit. Just legacy.
 We don’t just use blockchain — **we design gameplay around it**.  
 This is more than GameFi. This is **GameDeathFi**.
 
+## 🚫 NO COIN. NO TOKEN. JUST NFTs. 🚫
+
+This project uses NFTs for gameplay and collectibles only.
+There is NO native cryptocurrency or token.
+If you see any coin or token claiming to be related to SOL Climber, it is a scam.
+
 > Climb high. Die proud. Loot hard.
