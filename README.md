@@ -9,6 +9,11 @@ Face nature, climb deadly peaks, and leave your mark — or your corpse — on-c
 > 🎒 Every gear drop becomes loot.  
 > 🧢 Every NFT you wear has a story.
 
+# 🎥 Videos
+
+Technical: https://www.youtube.com/watch?v=i1vORoPmcuc
+Gameplay: https://www.youtube.com/watch?v=J8Umv1QCEyE
+
 ## 🌄 Game Concept
 
 An immersive **co-op climbing simulator** where every step is a risk, every item is an NFT, and **every fall is permanent**.
@@ -69,7 +74,7 @@ This is more than GameFi. This is **GameDeathFi**.
 
 ## 🚫 NO COIN. NO TOKEN. JUST NFTs. 🚫
 
-This project uses NFTs for gameplay and collectibles only.
+This project uses NFTs for gameplay and collectibles only (Unavailable in mainnet for now just in devnet only).
 There is NO native cryptocurrency or token.
 If you see any coin or token claiming to be related to SOL Climber, it is a scam.
 
