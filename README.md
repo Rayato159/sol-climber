@@ -11,8 +11,8 @@ Face nature, climb deadly peaks, and leave your mark — or your corpse — on-c
 
 # 🎥 Videos
 
-Technical: https://www.youtube.com/watch?v=i1vORoPmcuc
-Gameplay: https://www.youtube.com/watch?v=J8Umv1QCEyE
+- **Technical:** https://www.youtube.com/watch?v=i1vORoPmcuc
+- **Gameplay:** https://www.youtube.com/watch?v=J8Umv1QCEyE
 
 ## 🌄 Game Concept
 
