@@ -1,81 +1,65 @@
-# 🧗 SOL Climber: On-Chain Death, Glory, and Loot
+# 🧗‍♂️ SolClimber – A 3D NFT Mountain-Climbing Game on Solana
 
 ![example1](./screenshots/demo.gif)
 
-**SOL Climber** is a brutal, 3D survival mountain climbing game powered by **Rust + Bevy + Solana Anchor**.  
-Face nature, climb deadly peaks, and leave your mark — or your corpse — on-chain.
+## 🎮 Gameplay Concept
 
-> 🪦 Every death writes to the chain.  
-> 🎒 Every gear drop becomes loot.  
-> 🧢 Every NFT you wear has a story.
+Players climb procedurally dangerous mountain terrain. If they **successfully reach the summit**, their climb is recorded on-chain and they are rewarded with an **NFT**.
 
-# 🎥 Videos
+If they **fall and die**, their death is also **logged on-chain** as part of their character’s history.
 
-- **Technical:** https://www.youtube.com/watch?v=i1vORoPmcuc
-- **Gameplay:** https://www.youtube.com/watch?v=J8Umv1QCEyE
+The NFTs earned by summiting:
 
-## 🌄 Game Concept
+- Follow the **Metaplex metadata standard**
+- Can be **traded peer-to-peer**
+- Will later be **listed on the in-game marketplace** (coming soon)
 
-An immersive **co-op climbing simulator** where every step is a risk, every item is an NFT, and **every fall is permanent**.
+Climb high. Die proud. Loot hard.
 
-### 🧗 Climb or Die
+## ✅ Features Completed
 
-- Choose from a variety of **procedurally generated mountains**, each with unique weather, terrain, and hazards.
-- Plan your climb, manage your **HP** and **Stamina**, and pray you reach the summit before your legs — or rope — give out.
+- 3D movement system: walking, running, jumping
+- Camera system: third-person views
+- Death detection & on-chain death counter
+- Summit detection & on-chain climb record
+- NFT reward system upon summit (1 NFT per successful climb)
+- Integration with Solana via custom smart contracts
+- NFT metadata stored using the Metaplex standard
 
-### 🔥 Hardcore Survival
+## ⚒️ Tech Stack
 
-- **Permadeath**: If you die, your body and inventory drop. Other players can loot your remains and mint your gear as NFTs.
-- **Consumables**: Food, water, and first aid kits are limited. Trade or barter with other climbers... or leave them to die.
+![architecture](./screenshots/architecture.png)
 
-### 🎒 Loot = NFT
+| Component          | Tech Used                                                      |
+| ------------------ | -------------------------------------------------------------- |
+| 🎮 Game Engine     | [`Bevy`](https://bevyengine.org/) (Rust)                       |
+| 🌐 HTTP Server     | [`Ntex`](https://github.com/ntex-rs/ntex) (Rust)               |
+| 📦 Smart Contracts | [`Anchor`](https://www.anchor-lang.com/docs) (Rust for Solana) |
+| 🖼 NFT Standard     | [`Metaplex Token Metadata`](https://www.metaplex.com/)         |
+| 🧊 3D Assets       | [`Blender`](https://www.blender.org/)                          |
 
-- Items like jackets, pants, boots, gloves, and tools are all **on-chain NFTs**.
-- Every successful summit mints new loot based on mountain difficulty.
-- **Dropped items stay on-chain** — visible, lootable, and tradeable.
+## 🚧 In Progress
 
-## 💱 Real On-Chain Economy
+- In-game NFT **Marketplace** for listing/selling earned NFTs
+- **P2P NFT trading** system between players
+- Stamina, oxygen, and weather mechanics
+- Procedural terrain with unique mountain biomes
+- UI/UX improvements and animations
 
-- **All items = NFTs** stored on **Solana**, fully ownable and tradable.
-- Built-in **player marketplace** with SOL-based listing and barter mechanics.
-- **Official in-game store** provides basic supplies (food, meds) using SOL, fueling the game’s economy.
-- Small **transaction fee** on marketplace sales generates game revenue.
+## 🧠 Vision
 
-## 🤝 Multiplayer Co-Op (Optional)
+This game blends real-time 3D gameplay with blockchain-backed progression, aiming to:
 
-- Climb solo or with a team.
-- Players can trade items mid-run or help revive others using shared gear.
-- Betrayal? Optional.
+- Provide **true digital ownership** of in-game achievements
+- Let players **earn & trade NFTs** based on skill
+- Encourage **risk vs reward** decisions that matter
 
-## 🧾 On-Chain Progress Tracking
+## 🔗 License
 
-Your journey is immortalized on-chain:
-
-- ✅ Number of successful summits
-- 🪦 Total deaths
-- 🏕️ Checkpoints reached
-- 🎒 NFT gear owned and lost
-- 🧠 Rare climbs + unique expedition IDs
-
-All data is **stored on Solana**. No resets. No bullshit. Just legacy.
-
-## 🛠️ Tech Stack
-
-- 🦀 Rust (game & on-chain logic)
-- 🎮 Bevy (3D rendering + game engine)
-- 🧠 Solana Anchor (program logic + player statistics)
-- 🧾 Metaplex (NFT metadata + marketplaces)
-
-## 🧪 For Colosseum Breakout Hackathon
-
-**SOL Climber** is built as a fully decentralized gaming experience.  
-We don’t just use blockchain — **we design gameplay around it**.  
-This is more than GameFi. This is **GameDeathFi**.
+Apache-2.0
 
 ## 🚫 NO COIN. NO TOKEN. JUST NFTs. 🚫
 
 This project uses NFTs for gameplay and collectibles only (Unavailable in mainnet for now just in devnet only).
 There is NO native cryptocurrency or token.
 If you see any coin or token claiming to be related to SOL Climber, it is a scam.
-
-> Climb high. Die proud. Loot hard.
