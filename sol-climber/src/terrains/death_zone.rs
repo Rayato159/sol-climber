@@ -35,7 +35,7 @@ pub fn cache_deathzone_bounds(
     transform: Query<&Transform, With<DeathZone>>,
     mut bounds: ResMut<DeathZoneBounds>,
 ) {
-    for entity in children.iter_descendants(trigger.entity()) {
+    for entity in children.iter_descendants(trigger.target().entity()) {
         let Ok(mesh3d) = mesh3d_query.get(entity) else {
             continue;
         };

@@ -56,7 +56,9 @@ pub fn camera_follow_player(
     time: Res<Time>,
 ) {
     for (player_transform, player_physics) in player_query.iter() {
-        let mut camera_transform = camera_query.single_mut();
+        let Ok(mut camera_transform) = camera_query.single_mut() else {
+            continue;
+        };
 
         let offset = Vec3::new(0.0, player_physics.player_height, 5.0);
         let target_pos = player_transform.translation + offset;
@@ -75,7 +77,11 @@ pub fn camera_zoom(
     camera_setting: Res<CameraSetting>,
     mouse_scroll_input: Res<AccumulatedMouseScroll>,
 ) {
-    if let Projection::Perspective(ref mut perspective) = *camera_query.single_mut().0 {
+    let Ok(mut camera_query) = camera_query.single_mut() else {
+        return;
+    };
+
+    if let Projection::Perspective(ref mut perspective) = *camera_query.0 {
         let delta_zoom = -mouse_scroll_input.delta.y * camera_setting.zoom_speed;
 
         perspective.fov = (perspective.fov + delta_zoom).clamp(
@@ -110,12 +116,18 @@ pub fn orbit_camera_control(
 
 pub fn camera_follow_orbit_player(
     orbit: Res<CameraOrbit>,
-    rapier_context: ReadDefaultRapierContext,
+    rapier_context: ReadRapierContext,
     player_query: Query<&Transform, With<Player>>,
     mut camera_query: Query<&mut Transform, (With<MainCamera>, Without<Player>)>,
 ) {
     for player in player_query.iter() {
-        let mut camera_transform = camera_query.single_mut();
+        let Ok(mut camera_transform) = camera_query.single_mut() else {
+            continue;
+        };
+
+        let Ok(context) = rapier_context.single() else {
+            continue;
+        };
 
         let yaw = orbit.yaw;
         let pitch = orbit.pitch;
@@ -134,7 +146,7 @@ pub fn camera_follow_orbit_player(
         let max_dist = offset.length();
         let mut final_dist = max_dist;
 
-        if let Some((_entity, toi)) = rapier_context.cast_ray(
+        if let Some((_entity, toi)) = context.cast_ray(
             player_eye_pos,
             dir,
             max_dist,

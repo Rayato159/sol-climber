@@ -157,7 +157,9 @@ pub fn player_movement(
             player_ground_sensor,
         ) in player_query.iter_mut()
         {
-            let camera = camera_query.single();
+            let Ok(camera) = camera_query.single() else {
+                continue;
+            };
 
             let mut direction = Vec3::ZERO;
 

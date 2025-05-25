@@ -40,7 +40,7 @@ pub fn on_mesh_spawned(
     mesh_query: Query<&Mesh3d>,
     mut commands: Commands,
 ) {
-    for entity in children.iter_descendants(trigger.entity()) {
+    for entity in children.iter_descendants(trigger.target().entity()) {
         let Ok(mesh) = mesh_query.get(entity) else {
             continue;
         };
@@ -50,9 +50,15 @@ pub fn on_mesh_spawned(
         };
 
         if let Some((vertices, indices)) = extract_mesh_data(terrain_mesh) {
+            let Ok(collider) =
+                Collider::trimesh_with_flags(vertices, indices, TriMeshFlags::FIX_INTERNAL_EDGES)
+            else {
+                continue;
+            };
+
             commands.entity(entity).insert((
                 RigidBody::Fixed,
-                Collider::trimesh_with_flags(vertices, indices, TriMeshFlags::FIX_INTERNAL_EDGES),
+                collider,
                 Restitution::coefficient(0.0),
                 Friction::coefficient(1.0),
             ));
@@ -67,7 +73,7 @@ pub fn on_summit_zone_mesh_spawned(
     mesh_query: Query<&Mesh3d>,
     mut commands: Commands,
 ) {
-    for entity in children.iter_descendants(trigger.entity()) {
+    for entity in children.iter_descendants(trigger.target().entity()) {
         let Ok(mesh) = mesh_query.get(entity) else {
             continue;
         };
@@ -77,9 +83,15 @@ pub fn on_summit_zone_mesh_spawned(
         };
 
         if let Some((vertices, indices)) = extract_mesh_data(terrain_mesh) {
+            let Ok(collider) =
+                Collider::trimesh_with_flags(vertices, indices, TriMeshFlags::FIX_INTERNAL_EDGES)
+            else {
+                continue;
+            };
+
             commands.entity(entity).insert((
                 RigidBody::Fixed,
-                Collider::trimesh_with_flags(vertices, indices, TriMeshFlags::FIX_INTERNAL_EDGES),
+                collider,
                 Restitution::coefficient(0.0),
                 Friction::coefficient(1.0),
                 ActiveEvents::COLLISION_EVENTS,

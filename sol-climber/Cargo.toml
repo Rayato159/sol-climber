@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-bevy = "0.15"
-bevy_rapier3d = { version = "0.28", features = ["parallel", "simd-nightly"] }
+bevy = "0.16"
+bevy_rapier3d = { version = "0.30.0", features = ["simd-stable"] }
 bevy-inspector-egui = "0.30.0"
 bevy_skybox = "0.6.0"
 serde_json = "1.0.140"
